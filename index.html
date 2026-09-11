@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti, Mi Amor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --crema: #fbeee7;
+    --crema-borde: #f4d9d0;
+    --rosa-vino: #c94f6d;
+    --rosa-suave: #f2b6c6;
+    --tinta: #5a3d38;
+    --tinta-suave: #7a5a52;
+    --cafe-semilla: #6b4a3a;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html, body{ width:100%; height:100%; }
+
+  body{
+    font-family:'Poppins', sans-serif;
+    color:var(--tinta);
+    background: radial-gradient(circle at 30% 20%, #131a2e 0%, #0a0e1c 50%, #04050c 100%);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow-x:hidden;
+    padding:24px;
+    transition: background 0.9s ease;
+  }
+
+  /* ================= VÍA LÁCTEA (franja tenue de fondo) ================= */
+  .via-lactea{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0;
+    transition:opacity 1.4s ease;
+    background:
+      radial-gradient(ellipse 140% 32% at 60% 30%, rgba(210,205,235,0.10) 0%, rgba(180,175,215,0.05) 40%, transparent 72%);
+    transform: rotate(-18deg) scale(1.3);
+    filter: blur(1px);
+  }
+  body.modo-noche .via-lactea{ opacity:1; }
+
+  /* ================= ESTRELLAS ================= */
+  .estrellas{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0;
+    transition:opacity 1.1s ease;
+    overflow:hidden;
+  }
+  body.modo-noche .estrellas{ opacity:1; }
+
+  .estrella{
+    position:absolute;
+    border-radius:50%;
+    background:#fff;
+    animation-name: destello-estrella;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  .estrella--brillante{
+    box-shadow: 0 0 4px 1px currentColor;
+  }
+
+  @keyframes destello-estrella{
+    0%, 100% { opacity: 0.25; transform: scale(0.8); }
+    50% { opacity: var(--brillo-max, 1); transform: scale(1.2); }
+  }
+
+  @keyframes cruzar-cielo{
+    0%{ transform: translate(0,0) rotate(-32deg); opacity:0; }
+    6%{ opacity:1; }
+    22%{ opacity:0; }
+    100%{ transform: translate(-260px, 170px) rotate(-32deg); opacity:0; }
+  }
+
+  .estrella-fugaz{
+    position:fixed;
+    top:0; left:0;
+    width:110px;
+    height:2px;
+    background:linear-gradient(90deg, #fff, rgba(255,255,255,0));
+    border-radius:2px;
+    pointer-events:none;
+    z-index:0;
+    filter: drop-shadow(0 0 4px #fff);
+    animation: cruzar-cielo 1.6s ease-in forwards;
+  }
+
+  /* ================= LUNA MENGUANTE ================= */
+  .luna {
+    position: fixed;
+    top: 6%;
+    left: 7%;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    box-shadow: inset 18px 4px 0 0px #fffdfa;
+    filter: drop-shadow(0 0 20px rgba(255, 253, 250, 0.4));
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1.1s ease;
+    animation: flotar-luna 9s ease-in-out infinite;
+  }
+
+  .luna::before{
+    content:'';
+    position:absolute;
+    inset:-60px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(255,253,240,0.16) 0%, rgba(255,253,240,0.06) 45%, transparent 72%);
+    z-index:-1;
+    animation: pulso-halo-luna 9s ease-in-out infinite;
+  }
+
+  body.modo-noche .luna { opacity: 1; }
+
+  @keyframes flotar-luna {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(5px, -9px); }
+    50%  { transform: translate(-4px, -18px); }
+    75%  { transform: translate(6px, -8px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  @keyframes pulso-halo-luna{
+    0%, 100% { opacity: 0.75; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.12); }
+  }
+
+  /* ================= CONTROLES FLOTANTES ================= */
+  .controles-flotantes{
+    position:fixed;
+    top:16px;
+    right:16px;
+    display:flex;
+    gap:8px;
+    z-index:60;
+  }
+
+  .boton-control{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.6);
+    background:rgba(255,255,255,0.55);
+    backdrop-filter: blur(6px);
+    font-size:1rem;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+    color:var(--tinta);
+  }
+  .boton-control:hover{ transform:scale(1.08); }
+  .boton-control:active{ transform:scale(0.94); }
+
+  body.modo-noche .boton-control{
+    background: rgba(40,25,60,0.55);
+    border-color: rgba(255,255,255,0.15);
+    color:#f1e6f7;
+  }
+
+  /* ================= PANTALLA INICIAL ================= */
+  .pantalla-inicio{
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    background: radial-gradient(circle at 50% 40%, #131a2e 0%, #0a0e1c 60%, #04050c 100%);
+    z-index:50;
+    transition: opacity 0.8s ease, background 0.9s ease;
+  }
+
+  body.modo-noche .pantalla-inicio{
+    background: radial-gradient(circle at 50% 40%, #131a2e 0%, #0a0e1c 60%, #04050c 100%);
+  }
+
+  .pantalla-inicio.oculto{
+    opacity:0;
+    pointer-events:none;
+  }
+
+  .corazon-semilla{
+    width: clamp(90px, 22vw, 150px);
+    cursor:pointer;
+    animation: latido 2.4s ease-in-out infinite;
+    filter: drop-shadow(0 8px 22px rgba(107,74,58,0.35));
+    transition: transform 0.2s ease;
+  }
+
+  .corazon-semilla:hover{ transform: scale(1.05); }
+  .corazon-semilla:active{ transform: scale(0.96); }
+
+  .corazon-semilla svg{ width:100%; height:100%; display:block; }
+
+  @keyframes latido{
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.07); }
+  }
+
+  .texto-inicio{
+    font-size:0.95rem;
+    font-weight:300;
+    color:var(--tinta-suave);
+    text-align:center;
+    letter-spacing:0.01em;
+  }
+
+  body.modo-noche .texto-inicio{ color:#cbb9e0; }
+
+  /* ================= CONTENEDOR PRINCIPAL ================= */
+  .contenido-principal{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:1040px;
+    opacity:0;
+    transform: translateY(14px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+
+  .contenido-principal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .tarjeta-principal{
+    width:100%;
+    background: var(--crema);
+    border: 1px solid var(--crema-borde);
+    border-radius:34px;
+    box-shadow: 0 20px 60px rgba(140,80,70,0.18);
+    padding:38px 40px 28px;
+    display:grid;
+    grid-template-columns: 1fr 1.15fr;
+    grid-template-areas:
+      "carta arbol"
+      "contador contador";
+    column-gap:28px;
+    row-gap:20px;
+    transition: background 0.9s ease, box-shadow 0.9s ease, border-color 0.9s ease;
+  }
+
+  body.modo-noche .tarjeta-principal{
+    background: rgba(26, 21, 37, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 25px rgba(255, 255, 255, 0.03);
+  }
+
+  /* ---- Columna carta ---- */
+  .columna-carta{
+    grid-area: carta;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:14px;
+  }
+
+  .titulo-carta{
+    font-family:'Dancing Script', cursive;
+    font-weight:600;
+    font-size:clamp(1.7rem, 3vw, 2.2rem);
+    color:var(--rosa-vino);
+  }
+
+  body.modo-noche .titulo-carta{ color:#f2b6c6; }
+
+  .cuerpo-carta p{
+    font-size:0.98rem;
+    font-weight:300;
+    line-height:1.75;
+    color:var(--tinta);
+    margin-bottom:10px;
+  }
+
+  body.modo-noche .cuerpo-carta p{ color:#d8cbe8; }
+
+  .divisor-carta{
+    width:34px;
+    height:1px;
+    background: var(--tinta-suave);
+    opacity:0.5;
+    margin:6px 0 10px;
+  }
+
+  body.modo-noche .divisor-carta{ background:#c9b8db; }
+
+  .firma-carta{
+    font-family:'Dancing Script', cursive;
+    font-size:1.4rem;
+    color:var(--rosa-vino);
+    margin-top:6px;
+  }
+
+  body.modo-noche .firma-carta{ color:#f2e9eb; }
+
+  .nombres-carta{
+    font-size:0.85rem;
+    font-weight:400;
+    color:var(--tinta-suave);
+  }
+
+  body.modo-noche .nombres-carta{ color:#c9b8db; }
+
+  /* ---- Columna árbol ---- */
+  .columna-arbol{
+    grid-area: arbol;
+    position:relative;
+    min-height:340px;
+  }
+
+  #arbol-canvas{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+
+  /* ---- Tooltip de recuerdos ---- */
+  .tooltip-recuerdo{
+    position:absolute;
+    transform:translate(-50%, -125%);
+    background:rgba(255,255,255,0.96);
+    color:var(--tinta);
+    padding:6px 13px;
+    border-radius:13px;
+    font-size:0.76rem;
+    font-weight:500;
+    white-space:nowrap;
+    box-shadow:0 6px 18px rgba(0,0,0,0.16);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.15s ease;
+    z-index:6;
+  }
+  .tooltip-recuerdo.visible{ opacity:1; }
+
+  body.modo-noche .tooltip-recuerdo{
+    background: rgba(45,28,66,0.96);
+    color:#f1e6f7;
+  }
+
+  /* ---- Luciérnagas ---- */
+  .luciernagas{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 1.1s ease;
+    z-index:2;
+  }
+  body.modo-noche .luciernagas{ opacity:1; }
+
+  .luciernagas span{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:#e8a33d;
+    border-radius:50%;
+    box-shadow:0 0 9px 3px rgba(232,163,61,0.9);
+    opacity:0.7;
+    animation: flotar-luciernaga 6s ease-in-out infinite;
+  }
+  .luciernagas span:nth-child(1){ top:18%; left:14%; animation-delay:0s; }
+  .luciernagas span:nth-child(2){ top:32%; left:72%; animation-delay:0.9s; }
+  .luciernagas span:nth-child(3){ top:52%; left:28%; animation-delay:1.8s; }
+  .luciernagas span:nth-child(4){ top:64%; left:82%; animation-delay:2.6s; }
+  .luciernagas span:nth-child(5){ top:14%; left:54%; animation-delay:3.4s; }
+  .luciernagas span:nth-child(6){ top:76%; left:44%; animation-delay:4.2s; }
+  .luciernagas span:nth-child(7){ top:8%; left:32%; animation-delay:0.5s; }
+  .luciernagas span:nth-child(8){ top:26%; left:91%; animation-delay:1.3s; }
+  .luciernagas span:nth-child(9){ top:43%; left:8%; animation-delay:2.1s; }
+  .luciernagas span:nth-child(10){ top:57%; left:61%; animation-delay:2.9s; }
+  .luciernagas span:nth-child(11){ top:71%; left:18%; animation-delay:3.7s; }
+  .luciernagas span:nth-child(12){ top:88%; left:73%; animation-delay:4.5s; }
+  .luciernagas span:nth-child(13){ top:36%; left:46%; animation-delay:0.8s; }
+  .luciernagas span:nth-child(14){ top:12%; left:77%; animation-delay:1.6s; }
+  .luciernagas span:nth-child(15){ top:82%; left:92%; animation-delay:3.2s; }
+  .luciernagas span:nth-child(16){ top:48%; left:38%; animation-delay:5s; }
+
+  @keyframes flotar-luciernaga{
+    0%,100%{ transform:translate(0,0); opacity:0.45; }
+    25%{ transform:translate(9px,-15px); opacity:1; }
+    50%{ transform:translate(-7px,-6px); opacity:0.6; }
+    75%{ transform:translate(10px,11px); opacity:0.9; }
+  }
+
+  /* ---- Franja contador ---- */
+  .franja-contador{
+    grid-area: contador;
+    padding-top:18px;
+    border-top: 1px solid rgba(122,90,82,0.25);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    align-items:center;
+    transition: border-color 0.9s ease;
+  }
+
+  body.modo-noche .franja-contador{ border-top-color: rgba(255,255,255,0.14); }
+
+  .etiqueta-contador{
+    font-size:0.85rem;
+    font-weight:300;
+    color:var(--tinta-suave);
+  }
+
+  body.modo-noche .etiqueta-contador{ color:#c9b8db; }
+
+  .tiempo-en-linea{
+    font-size:clamp(1rem, 2.4vw, 1.35rem);
+    font-weight:500;
+    color:var(--tinta);
+    letter-spacing:0.01em;
+  }
+
+  body.modo-noche .tiempo-en-linea{ color:#f1e6f7; }
+
+  .tiempo-en-linea .valor{
+    color:var(--rosa-vino);
+    font-weight:600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  body.modo-noche .tiempo-en-linea .valor{ color:#f0e5e8; }
+
+  .pista-interaccion{
+    font-size:0.72rem;
+    font-weight:300;
+    color:var(--tinta-suave);
+    opacity:0.75;
+    margin-top:2px;
+  }
+
+  body.modo-noche .pista-interaccion{ color:#b6a4cc; }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 760px){
+    .tarjeta-principal{
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "arbol"
+        "carta"
+        "contador";
+      padding:28px 22px 22px;
+      border-radius:26px;
+    }
+    .columna-arbol{ min-height:280px; }
+    .columna-carta{ text-align:center; align-items:center; }
+    .divisor-carta{ margin-left:auto; margin-right:auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body class="modo-noche">
+
+<div class="via-lactea"></div>
+<div class="estrellas" id="estrellas"></div>
+<div class="luna"></div>
+
+<div class="controles-flotantes">
+  <button id="boton-musica" class="boton-control" aria-label="Reproducir música" title="Reproducir música">♪</button>
+  <button id="boton-siguiente" class="boton-control" aria-label="Cambiar a una canción aleatoria" title="Siguiente canción aleatoria">⏭</button>
+  <button id="boton-mute" class="boton-control" aria-label="Silenciar sonido" title="Silenciar sonido">🔊</button>
+</div>
+
+<audio id="musica-fondo" loop preload="none"></audio>
+
+<div class="pantalla-inicio" id="pantalla-inicio">
+  <div class="corazon-semilla" id="corazon-semilla" role="button" tabindex="0" aria-label="Toca el corazón para comenzar">
+    <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 29 C16 29 0 18.5 0 8.8 C0 3.4 4 0 8.4 0 C11.6 0 14.4 1.8 16 4.7 C17.6 1.8 20.4 0 23.6 0 C28 0 32 3.4 32 8.8 C32 18.5 16 29 16 29 Z" fill="#6b4a3a"/>
+    </svg>
+  </div>
+  <p class="texto-inicio">Toca el corazón para comenzar nuestra historia</p>
+</div>
+
+<main class="contenido-principal" id="contenido-principal">
+  <div class="tarjeta-principal">
+
+    <div class="columna-carta">
+      <h1 class="titulo-carta">Para el amor de mi vida:</h1>
+      <div class="cuerpo-carta">
+        <p>Si pudiera elegir un lugar seguro, sería a tu lado.</p>
+        <p>Cuanto más tiempo estoy contigo, más te amo.</p>
+        <div class="divisor-carta"></div>
+        <p>Cada corazón de este árbol es un motivo por el cual te elijo, hoy y siempre. Tócalos y descubre algunos de nuestros recuerdos.</p>
+      </div>
+      <p class="firma-carta">Con todo mi amor.</p>
+      <p class="nombres-carta">Nombre 1 &amp; Nombre 2</p>
+    </div>
+
+    <div class="columna-arbol">
+      <canvas id="arbol-canvas"></canvas>
+      <div class="luciernagas" id="luciernagas">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="tooltip-recuerdo" id="tooltip-recuerdo"></div>
+    </div>
+
+    <div class="franja-contador">
+      <p class="etiqueta-contador">Mi amor por ti comenzó hace...</p>
+      <p class="tiempo-en-linea">
+        <span class="valor" id="dias">0</span> días
+        <span class="valor" id="horas">00</span> horas
+        <span class="valor" id="minutos">00</span> minutos
+        <span class="valor" id="segundos">00</span> segundos
+      </p>
+      <p class="pista-interaccion">Toca sobre los corazones para ver un recuerdo ✨</p>
+    </div>
+
+  </div>
+</main>
+
+<script>
+/* =========================================================
+   CONFIGURACIÓN — EDITA AQUÍ LO QUE QUIERAS PERSONALIZAR
+========================================================= */
+
+// Fecha de aniversario: new Date(Año, Mes(0-11), Día, Hora, Minuto)
+const FECHA_ANIVERSARIO = new Date(2026, 02, 01, 0, 0, 0);
+
+/* ================= CIELO ESTRELLADO ================= */
+function generarEstrellas(){
+  const contenedor = document.getElementById('estrellas');
+  if (!contenedor) return;
+
+  const coloresEstrella = ['#ffffff', '#eaf1ff', '#fff3dd', '#dce8ff'];
+  let html = '';
+
+  // Estrellas pequeñas y medianas, repartidas por todo el cielo
+  const CANTIDAD_BASE = 160;
+  for (let i = 0; i < CANTIDAD_BASE; i++){
+    const top = (Math.random() * 100).toFixed(2);
+    const left = (Math.random() * 100).toFixed(2);
+    const tam = (Math.random() * 1.5 + 0.6).toFixed(2);
+    const color = coloresEstrella[Math.floor(Math.random() * coloresEstrella.length)];
+    const duracion = (Math.random() * 3.5 + 2.5).toFixed(2);
+    const retraso = (Math.random() * 6).toFixed(2);
+    const brilloMax = (Math.random() * 0.4 + 0.6).toFixed(2);
+    html += `<span class="estrella" style="top:${top}%; left:${left}%; width:${tam}px; height:${tam}px; background:${color}; animation-duration:${duracion}s; animation-delay:-${retraso}s; --brillo-max:${brilloMax};"></span>`;
+  }
+
+  // Un pequeño grupo de estrellas más grandes y brillantes, como puntos focales
+  const CANTIDAD_BRILLANTE = 14;
+  for (let i = 0; i < CANTIDAD_BRILLANTE; i++){
+    const top = (Math.random() * 100).toFixed(2);
+    const left = (Math.random() * 100).toFixed(2);
+    const tam = (Math.random() * 1 + 1.8).toFixed(2);
+    const color = coloresEstrella[Math.floor(Math.random() * coloresEstrella.length)];
+    const duracion = (Math.random() * 3 + 3).toFixed(2);
+    const retraso = (Math.random() * 6).toFixed(2);
+    html += `<span class="estrella estrella--brillante" style="top:${top}%; left:${left}%; width:${tam}px; height:${tam}px; background:${color}; color:${color}; animation-duration:${duracion}s; animation-delay:-${retraso}s; --brillo-max:1;"></span>`;
+  }
+
+  contenedor.innerHTML = html;
+}
+generarEstrellas();
+
+// Estrella fugaz ocasional, sutil y espaciada, para dar vida al cielo
+function lanzarEstrellaFugaz(){
+  const fugaz = document.createElement('div');
+  fugaz.className = 'estrella-fugaz';
+  fugaz.style.top = (Math.random() * 35 + 5) + '%';
+  fugaz.style.left = (Math.random() * 40 + 40) + '%';
+  document.body.appendChild(fugaz);
+  fugaz.addEventListener('animationend', () => fugaz.remove());
+}
+
+function programarEstrellasFugaces(){
+  const espera = Math.random() * 18000 + 14000; // entre 14s y 32s
+  setTimeout(() => {
+    if (document.body.classList.contains('modo-noche')) lanzarEstrellaFugaz();
+    programarEstrellasFugaces();
+  }, espera);
+}
+programarEstrellasFugaces();
+
+// Mini recuerdos que aparecen al tocar cada corazón del árbol
+const RECUERDOS = [
+  "Nuestro primer beso",
+  "Esa noches en las gradas",
+  "Nuestra primera noche juntos",
+  "La primera vez que te dije te amo",
+  "Nuestra canción",
+  "El día que te conocí",
+  "Esa vez que armamos los gatitos",
+  "Esa vez que conociste al Loki",
+  "Laprimera vez que me abrazaste",
+  "Nuestras canciones",
+  "Esa llamada que duró toda la noche",
+  "El día que supe que eras tú",
+  "La primera vez que fui a Pasto",
+  "La primera vez que almorzamos juntos",
+  "La vez que fuimos a cine"
+];
+
+// Frases que aparecen al hacer "estallar" corazones del árbol con un clic
+const FRASES_SORPRESA = [
+  "Te amo",
+  "Mi lugar favorito eres tú",
+  "Contigo, siempre",
+  "Eres mi persona favorita",
+  "Gracias por existir",
+  "Mi corazón es tuyo",
+  "Cada día te amo más",
+  "Eres mi hogar"
+];
+
+// Canciones de fondo locales
+const CANCIONES_FONDO = [
+  "virgen.mp3",
+  "reloj-ingrato.mp3",
+  "tu y yo.mp3"
+];
+
+/* ================= CONTADOR EN VIVO ================= */
+let contadorIniciado = false;
+
+function actualizarContador(){
+  const ahora = new Date();
+  let diferencia = ahora - FECHA_ANIVERSARIO;
+  if (diferencia < 0) diferencia = 0;
+
+  const segTotal = Math.floor(diferencia / 1000);
+  const dias = Math.floor(segTotal / 86400);
+  const horas = Math.floor((segTotal % 86400) / 3600);
+  const minutos = Math.floor((segTotal % 3600) / 60);
+  const segundos = segTotal % 60;
+
+  document.getElementById('dias').textContent = dias.toLocaleString('es-ES');
+  document.getElementById('horas').textContent = String(horas).padStart(2,'0');
+  document.getElementById('minutos').textContent = String(minutos).padStart(2,'0');
+  document.getElementById('segundos').textContent = String(segundos).padStart(2,'0');
+}
+
+function iniciarContador(){
+  if (contadorIniciado) return;
+  contadorIniciado = true;
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
+}
+
+/* ================= SONIDO ================= */
+let audioCtx = null;
+let sonidoActivado = true;
+
+function obtenerAudioCtx(){
+  if (!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function reproducirCampanita(){
+  if (!sonidoActivado) return;
+  const ctxA = obtenerAudioCtx();
+  const ahora = ctxA.currentTime;
+  const osc = ctxA.createOscillator();
+  const gain = ctxA.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(880, ahora);
+  osc.frequency.exponentialRampToValueAtTime(1320, ahora + 0.12);
+  gain.gain.setValueAtTime(0.0001, ahora);
+  gain.gain.exponentialRampToValueAtTime(0.22, ahora + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ahora + 0.9);
+  osc.connect(gain).connect(ctxA.destination);
+  osc.start(ahora);
+  osc.stop(ahora + 0.9);
+}
+
+function reproducirPop(){
+  if (!sonidoActivado) return;
+  const ctxA = obtenerAudioCtx();
+  const ahora = ctxA.currentTime;
+  const osc = ctxA.createOscillator();
+  const gain = ctxA.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(520, ahora);
+  osc.frequency.exponentialRampToValueAtTime(180, ahora + 0.12);
+  gain.gain.setValueAtTime(0.18, ahora);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ahora + 0.15);
+  osc.connect(gain).connect(ctxA.destination);
+  osc.start(ahora);
+  osc.stop(ahora + 0.15);
+}
+
+/* ================= MÚSICA DE FONDO ================= */
+const musicaFondo = document.getElementById('musica-fondo');
+musicaFondo.volume = 0.35;
+
+const botonMusica = document.getElementById('boton-musica');
+let musicaSonando = false;
+let cancionActual = null;
+
+function elegirCancionAleatoria(){
+  const opciones = CANCIONES_FONDO.filter(cancion => cancion !== cancionActual);
+  return opciones[Math.floor(Math.random() * opciones.length)];
+}
+
+function iniciarMusicaAleatoria(){
+  const cancion = elegirCancionAleatoria();
+  cancionActual = cancion;
+  musicaFondo.src = cancion;
+  musicaFondo.play().then(() => {
+    musicaSonando = true;
+    botonMusica.textContent = '❚❚';
+    botonMusica.setAttribute('aria-label', 'Pausar música');
+  }).catch(() => {
+    musicaSonando = false;
+  });
+}
+
+document.getElementById('boton-siguiente').addEventListener('click', iniciarMusicaAleatoria);
+
+botonMusica.addEventListener('click', () => {
+  if (musicaSonando){
+    musicaFondo.pause();
+    musicaSonando = false;
+    botonMusica.textContent = '♪';
+    botonMusica.setAttribute('aria-label', 'Reproducir música');
+  } else {
+    musicaFondo.play().catch(() => {});
+    musicaSonando = true;
+    botonMusica.textContent = '❚❚';
+    botonMusica.setAttribute('aria-label', 'Pausar música');
+  }
+});
+
+const botonMute = document.getElementById('boton-mute');
+botonMute.addEventListener('click', () => {
+  sonidoActivado = !sonidoActivado;
+  musicaFondo.muted = !sonidoActivado;
+  botonMute.textContent = sonidoActivado ? '🔊' : '🔇';
+  botonMute.setAttribute('aria-label', sonidoActivado ? 'Silenciar sonido' : 'Activar sonido');
+});
+
+/* ================= ÁRBOL DE CORAZONES ================= */
+const canvas = document.getElementById('arbol-canvas');
+const ctx = canvas.getContext('2d');
+const contenedorArbol = document.querySelector('.columna-arbol');
+const tooltip = document.getElementById('tooltip-recuerdo');
+let W, H, DPR;
+
+function ajustarCanvas(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = contenedorArbol.clientWidth;
+  H = contenedorArbol.clientHeight;
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+
+// Un solo mazo de tonos café (de un poco más oscuros a más claros) repartidos
+// aleatoriamente por toda la copa, sin zonas fijas, para un moteado uniforme.
+const PALETA_HOJAS = [
+  '#6b4426', '#7a4f2e', '#8a5a34', '#93643a',  // café más oscuros
+  '#a9714a', '#c99568',                        // café medios
+  '#d9b48f', '#e8c9a0', '#c59f79', '#eddcbe'   // café claros / beige-crema
+];
+
+function elegirColorHoja(){
+  return PALETA_HOJAS[Math.floor(Math.random() * PALETA_HOJAS.length)];
+}
+
+function dibujarCorazon(x, y, tam, color, alpha, rotacion){
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotacion);
+  ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  const s = tam;
+  ctx.moveTo(0, s * 0.3);
+  ctx.bezierCurveTo(-s, -s * 0.6, -s * 1.6, s * 0.35, 0, s * 1.15);
+  ctx.bezierCurveTo(s * 1.6, s * 0.35, s, -s * 0.6, 0, s * 0.3);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function puntoCorazonParametrico(angulo, profundidad){
+  const seno = Math.sin(angulo);
+  const xBorde = 16 * seno * seno * seno;
+  const yBorde = 13 * Math.cos(angulo) - 5 * Math.cos(2 * angulo)
+    - 2 * Math.cos(3 * angulo) - Math.cos(4 * angulo);
+  return {
+    x: (xBorde / 16) * profundidad,
+    y: -(yBorde / 17) * profundidad
+  };
+}
+
+function generarPuntosCorazonFollaje(cantidad){
+  const puntos = [];
+  const proporcionContorno = 0.34;
+  const paresContorno = Math.round((cantidad * proporcionContorno) / 2);
+  const paresInterior = Math.ceil(cantidad / 2) - paresContorno;
+
+  for (let i = 0; i < paresContorno; i++){
+    const angulo = (i / paresContorno) * Math.PI * 2;
+    const profundidad = 0.94 + Math.random() * 0.06;
+    const p = puntoCorazonParametrico(angulo, profundidad);
+    puntos.push({ x: p.x, y: p.y, esContorno: true, profundidad });
+    if (puntos.length < cantidad) puntos.push({ x: -p.x, y: p.y, esContorno: true, profundidad });
+  }
+
+  for (let i = 0; i < paresInterior; i++){
+    const angulo = Math.random() * Math.PI * 2;
+    const profundidad = Math.sqrt(Math.random()) * 0.88;
+    const p = puntoCorazonParametrico(angulo, profundidad);
+    puntos.push({ x: p.x, y: p.y, esContorno: false, profundidad });
+    if (puntos.length < cantidad) puntos.push({ x: -p.x, y: p.y, esContorno: false, profundidad });
+  }
+
+  return puntos;
+}
+
+const puntosFollajeCrudos = generarPuntosCorazonFollaje(820);
+let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+puntosFollajeCrudos.forEach(p => {
+  if (p.x < minX) minX = p.x;
+  if (p.x > maxX) maxX = p.x;
+  if (p.y < minY) minY = p.y;
+  if (p.y > maxY) maxY = p.y;
+});
+
+let hojas = [];
+let tronco = {};
+
+function generarEscena(){
+  const anchoDisponible = W * 0.9;
+  const altoTroncoBase = Math.max(60, H * 0.34);
+  const altoDisponibleFollaje = H * 0.58;
+
+  const escala = Math.min(
+    anchoDisponible / (maxX - minX),
+    altoDisponibleFollaje / (maxY - minY)
+  );
+
+  const centroX = W / 2;
+  const yTopeTronco = H - altoTroncoBase;
+  // La copa se hunde un poco sobre el tope del tronco para tapar las ramas cortas
+  const solapamientoCopa = altoTroncoBase * 0.20;
+  const offsetX = centroX - ((minX + maxX) / 2) * escala;
+  const offsetY = (yTopeTronco + solapamientoCopa) - maxY * escala;
+
+  hojas = [];
+  for (let i = 0; i < puntosFollajeCrudos.length; i += 2){
+    const pIzq = puntosFollajeCrudos[i];
+    const pDer = puntosFollajeCrudos[i + 1];
+    if (!pIzq || !pDer) continue;
+
+    const esContorno = pIzq.esContorno;
+    const tam = esContorno ? (4 + Math.random() * 2.2) : (3.5 + Math.random() * 5.5);
+    const rotacionBase = (Math.random() - 0.5) * 1.1;
+    const flotarOffset = Math.random() * Math.PI * 2;
+    const ordenAltura = (maxY - pIzq.y) / (maxY - minY);
+    const color = elegirColorHoja(esContorno, pIzq.profundidad, ordenAltura);
+    const extraOrden = esContorno ? 0.12 : Math.random() * 0.35;
+    const ordenNormalizado = Math.min(1, ordenAltura * 0.75 + extraOrden);
+    const indicePar = i / 2;
+    const mensaje = RECUERDOS[indicePar % RECUERDOS.length];
+
+    [
+      { p: pIzq, signoRotacion: 1 },
+      { p: pDer, signoRotacion: -1 }
+    ].forEach(({ p, signoRotacion }) => {
+      hojas.push({
+        x: p.x * escala + offsetX,
+        y: p.y * escala + offsetY,
+        tam,
+        color,
+        rotacion: rotacionBase * signoRotacion,
+        ordenNormalizado,
+        flotarOffset,
+        mensaje
+      });
+    });
+  }
+
+  tronco = {
+    xCentro: centroX,
+    yBase: H,
+    yTope: yTopeTronco,
+    anchoBase: Math.max(14, W * 0.045),
+    anchoTope: Math.max(7, W * 0.02)
+  };
+}
+
+let particulas = [];
+function crearParticula(){
+  return {
+    x: tronco.xCentro + (Math.random() - 0.6) * (W * 0.5),
+    y: (tronco.yTope || H * 0.3) + Math.random() * (H * 0.25),
+    tam: 4 + Math.random() * 6,
+    velY: 0.95 + Math.random() * 1.15,
+    velX: -0.9 + Math.random() * 0.3,
+    balanceo: Math.random() * Math.PI * 2,
+    velBalanceo: 0.016 + Math.random() * 0.03,
+    color: PALETA_HOJAS[Math.floor(Math.random() * PALETA_HOJAS.length)],
+    alpha: 0.45 + Math.random() * 0.4,
+    rotacion: Math.random() * Math.PI * 2,
+    velRotacion: (Math.random() - 0.5) * 0.02,
+    vida: 0,
+    vidaMax: 200 + Math.random() * 160
+  };
+}
+for (let i = 0; i < 22; i++) particulas.push(crearParticula());
+
+let particulasExplosion = [];
+let frasesFlotantes = [];
+
+function dibujarTronco(progreso){
+  const p = Math.max(0, Math.min(1, progreso / 0.42));
+  if (p <= 0) return;
+  const yTopeActual = tronco.yBase - (tronco.yBase - tronco.yTope) * p;
+
+  ctx.save();
+  const gradiente = ctx.createLinearGradient(tronco.xCentro, tronco.yBase, tronco.xCentro, yTopeActual);
+  gradiente.addColorStop(0, '#0f0a06');
+  gradiente.addColorStop(1, '#2b1c11');
+  ctx.fillStyle = gradiente;
+
+  ctx.beginPath();
+  ctx.moveTo(tronco.xCentro - tronco.anchoBase / 2, tronco.yBase);
+  ctx.bezierCurveTo(
+    tronco.xCentro - tronco.anchoBase * 0.35, tronco.yBase - (tronco.yBase - yTopeActual) * 0.34,
+    tronco.xCentro - tronco.anchoTope, yTopeActual + 8,
+    tronco.xCentro - tronco.anchoTope / 2, yTopeActual
+  );
+  ctx.bezierCurveTo(
+    tronco.xCentro + tronco.anchoTope, yTopeActual + 8,
+    tronco.xCentro + tronco.anchoBase * 0.35, tronco.yBase - (tronco.yBase - yTopeActual) * 0.34,
+    tronco.xCentro + tronco.anchoBase / 2, tronco.yBase
+  );
+  ctx.closePath();
+  ctx.fill();
+
+  const progresoRamas = Math.max(0, Math.min(1, (progreso - 0.18) / 0.34));
+  if (progresoRamas > 0){
+    const paresRamas = [
+      { y: 16, cx: W * 0.010, cy: -H * 0.006, ex: W * 0.022, ey: -H * 0.014, ancho: 5.4 },
+      { y: 38, cx: W * 0.011, cy: -H * 0.005, ex: W * 0.024, ey: -H * 0.010, ancho: 3.8 }
+    ];
+    const ramas = [];
+    paresRamas.forEach(r => {
+      ramas.push({ x: -1.5, y: r.y, cx: -r.cx, cy: r.cy, ex: -r.ex, ey: r.ey, ancho: r.ancho });
+      ramas.push({ x: 1.5, y: r.y, cx: r.cx, cy: r.cy, ex: r.ex, ey: r.ey, ancho: r.ancho });
+    });
+    ctx.lineCap = 'round';
+    ramas.forEach(rama => {
+      const inicioX = tronco.xCentro + rama.x;
+      const inicioY = yTopeActual + rama.y;
+      const controlX = tronco.xCentro + rama.cx * progresoRamas;
+      const controlY = yTopeActual + rama.cy * progresoRamas;
+      const finX = tronco.xCentro + rama.ex * progresoRamas;
+      const finY = yTopeActual + rama.ey * progresoRamas;
+      ctx.strokeStyle = '#1f140c';
+      ctx.lineWidth = rama.ancho * (0.45 + progresoRamas * 0.55);
+      ctx.beginPath();
+      ctx.moveTo(inicioX, inicioY);
+      ctx.quadraticCurveTo(controlX, controlY, finX, finY);
+      ctx.stroke();
+    });
+  }
+  ctx.restore();
+}
+
+let animando = false;
+let tiempoInicio = null;
+let progresoActualGlobal = 0;
+const DURACION_CRECIMIENTO = 6800;
+const UMBRAL_INTERACTIVO = 0.85;
+
+function bucleAnimacion(timestamp){
+  if (!tiempoInicio) tiempoInicio = timestamp;
+  const transcurrido = timestamp - tiempoInicio;
+  const progreso = Math.min(1, transcurrido / DURACION_CRECIMIENTO);
+  progresoActualGlobal = progreso;
+
+  ctx.clearRect(0, 0, W, H);
+
+  dibujarTronco(progreso);
+
+  const t = timestamp * 0.001;
+  for (const h of hojas){
+    const umbral = 0.3 + h.ordenNormalizado * 0.6;
+    if (progreso < umbral - 0.08) continue;
+    const localProgreso = Math.max(0, Math.min(1, (progreso - (umbral - 0.08)) / 0.18));
+    if (localProgreso <= 0) continue;
+
+    const flotarY = Math.sin(t * 1.0 + h.flotarOffset) * 2;
+    const flotarX = Math.cos(t * 0.7 + h.flotarOffset) * 1.3;
+
+    dibujarCorazon(
+      h.x + flotarX,
+      h.y + flotarY,
+      h.tam * (0.35 + 0.65 * localProgreso),
+      h.color,
+      0.9 * localProgreso,
+      h.rotacion
+    );
+  }
+
+  if (progreso > 0.55){
+    for (const part of particulas){
+      part.balanceo += part.velBalanceo;
+      part.x += part.velX + Math.sin(part.balanceo) * 0.4;
+      part.y += part.velY;
+      part.rotacion += part.velRotacion;
+      part.vida++;
+
+      const alphaVida = part.vida < 20 ? part.vida / 20 : (part.vida > part.vidaMax - 30 ? Math.max(0, (part.vidaMax - part.vida) / 30) : 1);
+
+      if (part.vida > part.vidaMax || part.y > H + 20 || part.x < -20){
+        Object.assign(part, crearParticula());
+        part.vida = 0;
+      } else {
+        dibujarCorazon(part.x, part.y, part.tam, part.color, part.alpha * alphaVida, part.rotacion);
+      }
+    }
+  }
+
+  particulasExplosion = particulasExplosion.filter(p => p.alpha > 0.03);
+  particulasExplosion.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.045;
+    p.alpha *= 0.93;
+    p.rotacion += p.velRotacion;
+    dibujarCorazon(p.x, p.y, p.tam, p.color, p.alpha, p.rotacion);
+  });
+
+  frasesFlotantes = frasesFlotantes.filter(f => f.vida < f.vidaMax);
+  frasesFlotantes.forEach(f => {
+    f.vida++;
+    const alpha = f.vida < 15 ? f.vida / 15 : Math.max(0, (f.vidaMax - f.vida) / 25);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = '#eddcbe';
+    ctx.font = "600 15px 'Poppins', sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillText(f.texto, f.x, f.y - f.vida * 0.55);
+    ctx.restore();
+  });
+
+  requestAnimationFrame(bucleAnimacion);
+}
+
+function iniciarArbol(){
+  if (animando) return;
+  animando = true;
+  ajustarCanvas();
+  generarEscena();
+  tiempoInicio = null;
+  requestAnimationFrame(bucleAnimacion);
+}
+
+window.addEventListener('resize', () => {
+  if (!animando) return;
+  ajustarCanvas();
+  generarEscena();
+});
+
+/* ================= TOOLTIP DE RECUERDOS ================= */
+function mostrarTooltip(hoja, px, py){
+  tooltip.textContent = hoja.mensaje;
+  tooltip.style.left = px + 'px';
+  tooltip.style.top = py + 'px';
+  tooltip.classList.add('visible');
+}
+
+function ocultarTooltip(){
+  tooltip.classList.remove('visible');
+}
+
+function manejarPuntero(clientX, clientY){
+  const rect = canvas.getBoundingClientRect();
+  const px = clientX - rect.left;
+  const py = clientY - rect.top;
+
+  let masCercana = null;
+  let menorDist = 20;
+  for (const h of hojas){
+    const d = Math.hypot(h.x - px, h.y - py);
+    if (d < menorDist){ menorDist = d; masCercana = h; }
+  }
+
+  if (masCercana){
+    mostrarTooltip(masCercana, px, py);
+    canvas.style.cursor = 'pointer';
+  } else {
+    ocultarTooltip();
+    canvas.style.cursor = 'default';
+  }
+}
+
+canvas.addEventListener('mousemove', (e) => {
+  if (progresoActualGlobal < UMBRAL_INTERACTIVO) return;
+  manejarPuntero(e.clientX, e.clientY);
+});
+
+canvas.addEventListener('mouseleave', ocultarTooltip);
+
+canvas.addEventListener('touchstart', (e) => {
+  if (progresoActualGlobal < UMBRAL_INTERACTIVO) return;
+  const t = e.touches[0];
+  manejarPuntero(t.clientX, t.clientY);
+}, { passive: true });
+
+/* ================= EXPLOSIÓN DE CORAZONES ================= */
+function manejarClicArbol(e){
+  if (progresoActualGlobal < 0.97) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const px = e.clientX - rect.left;
+  const py = e.clientY - rect.top;
+
+  const cercanos = hojas
+    .map(h => ({ h, d: Math.hypot(h.x - px, h.y - py) }))
+    .filter(o => o.d < 75)
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 6);
+
+  if (cercanos.length === 0) return;
+
+  cercanos.forEach(o => {
+    for (let i = 0; i < 6; i++){
+      particulasExplosion.push({
+        x: o.h.x,
+        y: o.h.y,
+        vx: (Math.random() - 0.5) * 3.4,
+        vy: (Math.random() - 0.9) * 3.4,
+        tam: 3 + Math.random() * 4,
+        color: o.h.color,
+        alpha: 1,
+        rotacion: Math.random() * Math.PI * 2,
+        velRotacion: (Math.random() - 0.5) * 0.3
+      });
+    }
+  });
+
+  frasesFlotantes.push({
+    x: px,
+    y: py,
+    texto: FRASES_SORPRESA[Math.floor(Math.random() * FRASES_SORPRESA.length)],
+    vida: 0,
+    vidaMax: 90
+  });
+
+  reproducirPop();
+}
+
+canvas.addEventListener('click', manejarClicArbol);
+
+/* ================= ACTIVACIÓN ================= */
+const pantallaInicio = document.getElementById('pantalla-inicio');
+const contenidoPrincipal = document.getElementById('contenido-principal');
+const corazonSemilla = document.getElementById('corazon-semilla');
+
+function comenzarExperiencia(){
+  obtenerAudioCtx();
+  reproducirCampanita();
+  pantallaInicio.classList.add('oculto');
+  contenidoPrincipal.classList.add('visible');
+  iniciarMusicaAleatoria();
+  iniciarContador();
+  setTimeout(iniciarArbol, 150);
+}
+
+corazonSemilla.addEventListener('click', comenzarExperiencia);
+corazonSemilla.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' '){
+    e.preventDefault();
+    comenzarExperiencia();
+  }
+});
+</script>
+
+</body>
+</html>
